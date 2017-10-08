@@ -1,0 +1,46 @@
+About:
+
+This application is used to bypass the Dexcom Share server for Looping ( https://github.com/LoopKit/Loop/ ), there may be other reasons to use it as well.
+
+This application will take the values from your NightScout website, and convert the JSON into a Dexcom Share friendly formatting for use with Loop.
+
+Instructions:
+
+1) Fork this repository if you want, and clone it to your local machine.
+2) Go into the directory you just cloned and create a virtual environment:
+
+$ python3 -m venv env
+$ source env/bin/activate
+$ pip install flask arrow
+
+At this point, you want to setup the application for use, you need to edit app.py and change the values on lines 11,12, and 13
+
+base_url = `http://yournightscout.website.domain'
+
+Server host = 0.0.0.0 if you want it to listen to all ip addresses on an interface, or you can set it to a specific IP, whether it be public or private.
+
+server_host = ‘0.0.0.0’
+
+You change the port, to whatever you want the application to listen on.
+
+server_port = ‘5000’
+
+Next, you need to modify your Loop code:
+
+Loop/Models/ServiceAuthentication/ShareService.swift
+
+Uncomment lines 55 and 62
+
+Next edit line 56 and change the host and port to match what you put in your DexcomShareServer
+
+let customServer = "http://server_host_ip_or_domain:5000"
+
+Go ahead and start the Dexcom_Bridge
+
+$ python3 app.py
+
+I prefer to run it in a screen session, and disconnect from the screen, you could probably output everything to /dev/null if you wanted and throw it in the background.
+
+Now, after you recompile Loop and push it to your phone. In the Dexcom Share Server, scroll down and select “custom” and you can choose any user/pass you want to use. (I put in a random user/pass).
+
+Watch your Loop, make sure it’s pulling numbers, but at this point, it should be polling every 5 minutes, and pull the numbers from this bridge instead of using Dexcom’s systems.
