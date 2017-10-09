@@ -1,6 +1,8 @@
 About:
 
 This application is used to bypass the Dexcom Share server for Looping ( https://github.com/LoopKit/Loop/ ), there may be other reasons to use it as well.
+This is an alternative to dabear's NightScoutShareServer ( https://github.com/dabear/NightscoutShareServer ). If you've deployed your NightScout share server
+manually, and not used Heroku/Azure, you can run this in tandem with your Nightscout.
 
 This application will take the values from your NightScout website, and convert the JSON into a Dexcom Share friendly formatting for use with Loop.
 
@@ -44,3 +46,6 @@ I prefer to run it in a screen session, and disconnect from the screen, you coul
 Now, after you recompile Loop and push it to your phone. In the Dexcom Share Server, scroll down and select “custom” and you can choose any user/pass you want to use. (I put in a random user/pass).
 
 Watch your Loop, make sure it’s pulling numbers, but at this point, it should be polling every 5 minutes, and pull the numbers from this bridge instead of using Dexcom’s systems.
+
+Thanks:
+dabear ( https://github.com/dabear/ ) - He made the initial code, this was just a port.
