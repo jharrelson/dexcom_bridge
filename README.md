@@ -12,12 +12,15 @@ This application will take the values from your NightScout website, and convert 
 2. Go into the directory you just cloned and create a virtual environment:
 
 `$ python3 -m venv env`
+
 3. Activate virtual environment:
 
 `$ source env/bin/activate`
+
 4. Install python modules:
 
 `$ pip install flask arrow`
+
 `$ pip install git+https://github.com/ps2/python-nightscout.git`
 
 At this point, you want to setup the application for use, you need to edit app.py and change the values on lines 11,12, and 13
