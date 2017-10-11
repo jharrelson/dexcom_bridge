@@ -10,10 +10,13 @@ This application will take the values from your NightScout website, and convert 
 
 1. Fork this repository if you want, and clone it to your local machine.
 2. Go into the directory you just cloned and create a virtual environment:
+
 `$ python3 -m venv env`
-3. Activate virtual environment
+3. Activate virtual environment:
+
 `$ source env/bin/activate`
-4. Install python modules
+4. Install python modules:
+
 `$ pip install flask arrow`
 `$ pip install git+https://github.com/ps2/python-nightscout.git`
 
