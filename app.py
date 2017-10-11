@@ -1,37 +1,32 @@
-import json
-import uuid
+from nightscout import Api
 from arrow import Arrow
-from datetime import datetime
 from urllib import request
 from flask import Flask, jsonify, request as req
 
-app = Flask('DexcomBridge')
-
-applicationId = 'd89443d2-327c-4a6f-89e5-496bbb0317db'
-base_url = ''
+application_id = 'd89443d2-327c-4a6f-89e5-496bbb0317db'
+nightscout_url = ''
 server_host = '0.0.0.0'
 server_port = 5000
 
+app = Flask('DexcomBridge')
+nightscout_api = Api(nightscout_url)
+
 class DexcomBridge:
+    @classmethod
     def get_nightscout_data(self, count):
-        url = base_url + '/pebble?count=' + count + '&units=mgdl'
-        res = request.urlopen(url).read()
+        return nightscout_api.get_sgvs({ 'count': count })
 
-        return res
+    @classmethod
+    def nightscout_to_dexcom(self, sgvs):
+        return [ {
+            'DT': '/Date(' + Arrow.fromdatetime(sgv.date).format('XSSSZ') + ')/',
+            'ST': '/Date(' + Arrow.fromdatetime(sgv.date).format('XSSSZ') + ')/',
+            'WT': '/Date(' + Arrow.fromdatetime(sgv.date).format('XSSS') + ')/',
+            'Value': int(sgv.sgv),
+            'Trend': DexcomBridge.convert_slope(sgv.direction)
+        } for sgv in sgvs ]
 
-    def nightscout_to_dexcom(self, nightscout_data):
-        nightscout_dict = json.loads(str(nightscout_data, 'utf-8'))
-        arr = []
-        for k in nightscout_dict['bgs']:
-            d = {}
-            d['DT'] = '/Date(' + Arrow.fromtimestamp(k['datetime'] / 1000).format('XSSSZ') + ')/' 
-            d['ST'] = '/Date(' + Arrow.fromtimestamp(k['datetime'] / 1000).format('XSSSZ') + ')/' 
-            d['WT'] = '/Date(' + Arrow.utcfromtimestamp(k['datetime'] / 1000).format('XSSS') + ')/' 
-            d['Value'] = int(k['sgv'])
-            d['Trend'] = self.convert_slope(k['direction'])
-            arr.append(d)
-        return arr
-
+    @classmethod
     def convert_slope(self, direction):
         return  {
                     'DoubleUp': 1,
@@ -49,14 +44,13 @@ class DexcomBridge:
 @app.route('/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues', methods=['GET', 'POST'])
 def index():
     count = req.args.get('maxCount', 3)
-    bridge = DexcomBridge()
-    res = bridge.get_nightscout_data(count)
-    res = bridge.nightscout_to_dexcom(res)
+    res = DexcomBridge.get_nightscout_data(count)
+    res = DexcomBridge.nightscout_to_dexcom(res)
     return jsonify(res), 200
 
 @app.route('/ShareWebServices/Services/General/LoginPublisherAccountByName', methods=['GET', 'POST'])
 def authCheck():
-    return jsonify(applicationId), 200
+    return jsonify(application_id), 200
     
 if __name__ == "__main__":
     app.run(host=server_host, port=server_port)
