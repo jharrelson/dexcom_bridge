@@ -1,10 +1,14 @@
 # About
 
 This application is used to bypass the Dexcom Share server for [Looping](https://github.com/LoopKit/Loop/), there may be other reasons to use it as well.
-This is an alternative to dabear's [NightScoutShareServer](https://github.com/dabear/NightscoutShareServer). If you've deployed your NightScout share server
-manually, and not used Heroku/Azure, you can run this in tandem with your Nightscout.
+This is an alternative to dabear's [NightScoutShareServer](https://github.com/dabear/NightscoutShareServer). 
 
 This application will take the values from your NightScout website, and convert the JSON into a Dexcom Share friendly formatting for use with Loop.
+
+# Prerequisites
+
+1. Existing NightScout server running.
+2. Python3
 
 # Instructions
 
