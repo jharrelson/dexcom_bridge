@@ -21,6 +21,15 @@ This application will take the values from your NightScout website, and convert 
     * `$ pip install flask arrow`
     * `$ pip install git+https://github.com/ps2/python-nightscout.git`
 
+# Optional API Authorization Configuration
+
+If you have your NightScout variable `AUTH_DEFAULT_ROLES = denied` and would still like to use this app, you will need to make some changes.
+
+1. Go to http://www.sha1-online.com and get the SHA1 hash of your `API_SECRET` from your NightScout Variables.
+2. Edit line 17 of app.py `url = base_url + '/pebble?secret=[SHA1HASH]&count=' + count + '&units=mgdl’` replacing `[SHA1HASH]` with the value that you copied from step 1.
+
+# Required Configuration
+
 At this point, you want to setup the application for use, you need to edit app.py and change the values on lines 11,12, and 13
 
 `nightscout_url = `http://yournightscout.website.domain'`
@@ -42,6 +51,8 @@ Uncomment lines 55 and 62
 Next edit line 56 and change the host and port to match what you put in your DexcomShareServer
 
 `let customServer = "http://server_host_ip_or_domain:5000"`
+
+# Running The Application
 
 Go ahead and start the Dexcom_Bridge
 
